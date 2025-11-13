@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel de Disparo Manual — Pixel Meta</title>
+
+<!-- META PIXEL -->
+<script>
+  // 🔥 COLE SEU PIXEL AQUI
+  !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);
+  t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)})(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1174595527982213'); // <-- COLOQUE SEU ID
+</script>
+<!-- FIM PIXEL -->
+
+<style>
+  body {
+    background:#111;
+    color:#fff;
+    font-family: Arial;
+    padding: 20px;
+  }
+  .btn{
+    background:#0f62fe;
+    padding:15px 20px;
+    border-radius:8px;
+    display:block;
+    width:260px;
+    margin:10px 0;
+    cursor:pointer;
+    text-align:center;
+    font-size:18px;
+  }
+</style>
+</head>
+<body>
+<div id="login" style="max-width:300px;margin:60px auto;text-align:center;">
+  <h2>🔒 Acesso Restrito</h2>
+  <input type="password" id="pass" placeholder="Digite a senha" style="padding:10px;width:100%;border-radius:6px;margin-bottom:10px;">
+  <button onclick="checkPass()" style="padding:12px 20px;border-radius:8px;width:100%;background:#0f62fe;color:#fff;font-size:16px;cursor:pointer;">Entrar</button>
+  <p style="color:#bbb;margin-top:10px;font-size:14px;">Painel exclusivo do administrador</p>
+</div>
+
+<div id="painel" style="display:none;">
+  <h1 style="text-align:center;">Painel Manual de Compras</h1>
+  <p style="text-align:center;color:#bbb;">Clique em um valor para enviar o evento de compra ao Pixel.</p>
+
+  <div class="btn" onclick="sendPurchase(9.90)">💰 Enviar Compra R$ 9,90</div>
+  <div class="btn" onclick="sendPurchase(10.90)">💰 Enviar Compra R$ 10,90</div>
+  <div class="btn" onclick="sendPurchase(11.90)">💰 Enviar Compra R$ 11,90</div>
+  <div class="btn" onclick="sendPurchase(12.90)">💰 Enviar Compra R$ 12,90</div>
+  <div class="btn" onclick="sendPurchase(13.90)">💰 Enviar Compra R$ 13,90</div>
+  <div class="btn" onclick="sendPurchase(16.90)">💰 Enviar Compra R$ 16,90</div>
+</div>
+
+<script>
+const SENHA = "admin123"; // 🔒 ALTERE AQUI SUA SENHA
+
+function checkPass(){
+  const p = document.getElementById('pass').value;
+  if(p === SENHA){
+    document.getElementById('login').style.display = "none";
+    document.getElementById('painel').style.display = "block";
+  } else {
+    alert("Senha incorreta!");
+  }
+}
+
+function sendPurchase(valor){
+  fbq('track', 'Purchase', {
+    value: valor,
+    currency: 'BRL'
+  });
+
+  const box = document.createElement('div');
+  box.innerText = "Compra enviada: R$ " + valor;
+  box.style.padding = "15px";
+  box.style.margin = "10px 0";
+  box.style.borderRadius = "8px";
+  box.style.background = "#1d1d1d";
+  box.style.border = "1px solid #333";
+  document.body.appendChild(box);
+}
+</script>
+</body>
+</html>
