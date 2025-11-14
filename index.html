@@ -7,14 +7,13 @@
 
 <!-- META PIXEL -->
 <script>
-  // 🔥 COLE SEU PIXEL AQUI
   !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
   n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
   n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);
   t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)})(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1174595527982213'); // <-- COLOQUE SEU ID
+  fbq('init', '1174595527982213');
 </script>
 <!-- FIM PIXEL -->
 
@@ -31,14 +30,22 @@
     border-radius:8px;
     display:block;
     width:260px;
-    margin:10px 0;
+    margin:10px auto;
     cursor:pointer;
     text-align:center;
+    font-size:18px;
+  }
+  .subtitulo {
+    text-align:center;
+    margin-top:30px;
+    color:#bbb;
     font-size:18px;
   }
 </style>
 </head>
 <body>
+
+<!-- LOGIN -->
 <div id="login" style="max-width:300px;margin:60px auto;text-align:center;">
   <h2>🔒 Acesso Restrito</h2>
   <input type="password" id="pass" placeholder="Digite a senha" style="padding:10px;width:100%;border-radius:6px;margin-bottom:10px;">
@@ -46,20 +53,43 @@
   <p style="color:#bbb;margin-top:10px;font-size:14px;">Painel exclusivo do administrador</p>
 </div>
 
+<!-- CONTEÚDO PRINCIPAL -->
 <div id="painel" style="display:none;">
-  <h1 style="text-align:center;">Painel Manual de Compras</h1>
-  <p style="text-align:center;color:#bbb;">Clique em um valor para enviar o evento de compra ao Pixel.</p>
 
+  <h1 style="text-align:center;">Painel Manual de Eventos</h1>
+  <p style="text-align:center;color:#bbb;">Clique em qualquer valor para enviar o evento ao Pixel.</p>
+
+  <!-- ======================== -->
+  <!--        COMPRA            -->
+  <!-- ======================== -->
+
+  <div class="subtitulo">🟩 EVENTO: PURCHASE (Compra Confirmada)</div>
+  
   <div class="btn" onclick="sendPurchase(9.00)">💰 Enviar Compra R$ 9,00</div>
   <div class="btn" onclick="sendPurchase(10.00)">💰 Enviar Compra R$ 10,00</div>
   <div class="btn" onclick="sendPurchase(11.00)">💰 Enviar Compra R$ 11,00</div>
   <div class="btn" onclick="sendPurchase(12.00)">💰 Enviar Compra R$ 12,00</div>
   <div class="btn" onclick="sendPurchase(13.00)">💰 Enviar Compra R$ 13,00</div>
   <div class="btn" onclick="sendPurchase(16.00)">💰 Enviar Compra R$ 16,00</div>
+
+  <!-- ======================== -->
+  <!--     PENDENTE (PIX)       -->
+  <!-- ======================== -->
+
+  <div class="subtitulo">🟨 EVENTOS: InitiateCheckout + PixPending</div>
+
+  <div class="btn" onclick="sendPending(9.00)">⌛ PIX Pendente – R$ 9,00</div>
+  <div class="btn" onclick="sendPending(10.00)">⌛ PIX Pendente – R$ 10,00</div>
+  <div class="btn" onclick="sendPending(11.00)">⌛ PIX Pendente – R$ 11,00</div>
+  <div class="btn" onclick="sendPending(12.00)">⌛ PIX Pendente – R$ 12,00</div>
+  <div class="btn" onclick="sendPending(13.00)">⌛ PIX Pendente – R$ 13,00</div>
+  <div class="btn" onclick="sendPending(16.00)">⌛ PIX Pendente – R$ 16,00</div>
+
 </div>
 
+<!-- SCRIPTS -->
 <script>
-const SENHA = "admin123"; // 🔒 ALTERE AQUI SUA SENHA
+const SENHA = "admin123"; // 🔒 ALTERE SUA SENHA AQUI
 
 function checkPass(){
   const p = document.getElementById('pass').value;
@@ -71,21 +101,36 @@ function checkPass(){
   }
 }
 
+/* ================================
+       EVENTO DE COMPRA
+================================*/
 function sendPurchase(valor){
   fbq('track', 'Purchase', {
     value: valor,
     currency: 'BRL'
   });
 
-  const box = document.createElement('div');
-  box.innerText = "Compra enviada: R$ " + valor;
-  box.style.padding = "15px";
-  box.style.margin = "10px 0";
-  box.style.borderRadius = "8px";
-  box.style.background = "#1d1d1d";
-  box.style.border = "1px solid #333";
-  document.body.appendChild(box);
+  alert("✔ Compra enviada: R$ " + valor.toFixed(2));
+}
+
+/* ================================
+   EVENTOS DE VENDA PENDENTE
+   (InitiateCheckout + PixPending)
+================================*/
+function sendPending(valor){
+  fbq('track', 'InitiateCheckout', {
+    value: valor,
+    currency: 'BRL'
+  });
+
+  fbq('trackCustom', 'PixPending', {
+    value: valor,
+    currency: 'BRL'
+  });
+
+  alert("⌛ Pendente enviado: InitiateCheckout + PixPending\nValor: R$ " + valor.toFixed(2));
 }
 </script>
+
 </body>
 </html>
